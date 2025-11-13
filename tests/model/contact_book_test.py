@@ -4,6 +4,9 @@ Unit tests for verifying the behavior of the ContactBook class methods.
 from src.model.contact import Contact
 from src.model.contact_book import ContactBook
 from src.model.name import Name
+from src.model.name_search_template import NameSearchTemplate
+from src.model.phone import Phone
+from src.model.phone_number_search_template import PhoneNumberSearchTemplate
 
 
 def test_add_contact_adds_new_contact():
@@ -108,8 +111,10 @@ def test_find_by_name_single_result():
     name = Name("John Doe")
     contact = Contact(name)
     book.add_contact(contact)
+    template = NameSearchTemplate("John")
 
-    result = book.find_by_name("John")
+    result = book.find_by_name(template)
+
     assert result == [contact]
 
 
@@ -122,8 +127,10 @@ def test_find_by_name_multiple_results():
     contact2 = Contact(Name("Johnny Depp"))
     book.add_contact(contact1)
     book.add_contact(contact2)
+    template = NameSearchTemplate("John")
 
-    result = book.find_by_name("John")
+    result = book.find_by_name(template)
+
     assert result == [contact1, contact2]
 
 
@@ -134,8 +141,10 @@ def test_find_by_name_no_matches():
     book = ContactBook()
     contact = Contact(Name("Alice Wonderland"))
     book.add_contact(contact)
+    template = NameSearchTemplate("John")
 
-    result = book.find_by_name("John")
+    result = book.find_by_name(template)
+
     assert result is None
 
 
@@ -147,19 +156,91 @@ def test_find_by_name_case_insensitivity():
     contact = Contact(Name("John Doe"))
     book.add_contact(contact)
 
-    result = book.find_by_name("john")
+    template = NameSearchTemplate("john")
+
+    result = book.find_by_name(template)
+
     assert result == [contact]
 
 
-def test_find_by_name_empty_substring():
+def test_find_by_phone_existing_number():
     """
-    Tests that find_by_name returns all contacts when an empty substring is provided.
+    Test that `find_by_phone` returns contacts with a matching phone number substring.
     """
     book = ContactBook()
-    contact1 = Contact(Name("John Smith"))
-    contact2 = Contact(Name("Jane Doe"))
+    contact1 = Contact(Name("John"))
+    contact2 = Contact(Name("Alice"))
+    phone1 = Phone("1234567890")
+    phone2 = Phone("9876543210")
+
+    contact1.add_phone(phone1)
+    contact2.add_phone(phone2)
     book.add_contact(contact1)
     book.add_contact(contact2)
 
-    result = book.find_by_name("")
-    assert result == [contact1, contact2]
+    template = PhoneNumberSearchTemplate("123")
+
+    result = book.find_by_phone(template)
+
+    assert result == [contact1]
+
+
+def test_find_by_phone_multiple_matches():
+    """
+    Test that `find_by_phone` returns all contacts that match a phone number substring.
+    """
+    book = ContactBook()
+    contact1 = Contact(Name("John"))
+    phone1 = Phone("1234567890")
+    contact1.add_phone(phone1)
+    book.add_contact(contact1)
+
+    contact2 = Contact(Name("Alice"))
+    phone2 = Phone("1230987650")
+    contact2.add_phone(phone2)
+    book.add_contact(contact2)
+
+    contact3 = Contact(Name("Mike"))
+    phone3 = Phone("4561237890")
+    contact3.add_phone(phone3)
+    book.add_contact(contact3)
+
+    template = PhoneNumberSearchTemplate("123")
+
+    result = book.find_by_phone(template)
+
+    assert result == [contact1, contact2, contact3]
+
+
+def test_find_by_phone_no_matches():
+    """
+    Test that `find_by_phone` returns None when no contacts match the phone number substring.
+    """
+    book = ContactBook()
+    contact1 = Contact(Name("John"))
+    contact2 = Contact(Name("Alice"))
+    phone1 = Phone("1234567890")
+    contact1.add_phone(phone1)
+    book.add_contact(contact1)
+
+    phone2 = Phone("9876543210")
+    contact2.add_phone(phone2)
+    book.add_contact(contact2)
+
+    template = PhoneNumberSearchTemplate("555")
+
+    result = book.find_by_phone(template)
+
+    assert result is None
+
+
+def test_find_by_phone_empty_contact_book():
+    """
+    Test that `find_by_phone` returns None when the contact book is empty.
+    """
+    book = ContactBook()
+    template = PhoneNumberSearchTemplate("123")
+
+    result = book.find_by_phone(template)
+
+    assert result is None

@@ -20,3 +20,6 @@ class InvalidPhoneNumberError(Exception):
 
     def __init__(self, phone: str):
         self.message = f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid phone number: '{phone}'."
+
+    def __str__(self) -> str:
+        return self.message

@@ -11,3 +11,6 @@ class AlreadyPhoneNumberError(Exception):
 
     def __init__(self, phone: str):
         self.message = f"{Fore.RED}[ERROR]{Style.RESET_ALL} Phone '{phone}' is already used."
+
+    def __str__(self) -> str:
+        return self.message

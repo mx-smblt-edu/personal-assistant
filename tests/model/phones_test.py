@@ -7,6 +7,7 @@ import pytest
 from src.error.already_phone_number_error import AlreadyPhoneNumberError
 from src.error.unknown_phone_number_error import UnknownPhoneNumberError
 from src.model.phone import Phone
+from src.model.phone_number_search_template import PhoneNumberSearchTemplate
 from src.model.phones import Phones
 
 
@@ -137,3 +138,50 @@ def test_change_phone_new_number_already_exists():
 
     with pytest.raises(AlreadyPhoneNumberError):
         phones.replace(old_phone, new_phone)
+
+
+def test_contains_existing_phone_number():
+    """
+    Tests that the `contains` method returns True for a phone number already in the list.
+    """
+    phones = Phones()
+    phone = Phone("1234567890")
+    phones.add(phone)
+    template = PhoneNumberSearchTemplate("1234567890")
+
+    assert phones.contains(template) is True
+
+
+def test_contains_non_existing_phone_number():
+    """
+    Tests that the `contains` method returns False for a phone number not in the list.
+    """
+    phones = Phones()
+    phone = Phone("1234567890")
+    phones.add(phone)
+    template = PhoneNumberSearchTemplate("9876543210")
+
+    assert phones.contains(template) is False
+
+
+def test_contains_partial_match_within_phone_number():
+    """
+    Tests that the `contains` method can find a partial match of a phone number.
+    """
+    phones = Phones()
+    phone = Phone("1234567890")
+    phones.add(phone)
+    template = PhoneNumberSearchTemplate("4567")
+
+    assert phones.contains(template) is True
+
+
+def test_contains_empty_phone_list():
+    """
+    Tests that the `contains` method of a `Contact` instance returns False
+    when the phone list is empty.
+    """
+    phones = Phones()
+    template = PhoneNumberSearchTemplate("1234567890")
+
+    assert phones.contains(template) is False

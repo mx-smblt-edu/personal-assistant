@@ -19,5 +19,9 @@ class InvalidEmailError(Exception):
     :ivar message: The error message detailing the invalid email information.
     :type message: str
     """
+
     def __init__(self, email: str):
         self.message = f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid email: '{email}'."
+
+    def __str__(self) -> str:
+        return self.message
