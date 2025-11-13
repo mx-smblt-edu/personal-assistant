@@ -42,6 +42,21 @@ class Contact:
 
         return self.__phones.remove(phone)
 
+    def change_phone(self, old_phone: Phone, new_phone: Phone) -> Phone:
+        """
+        Edits an existing phone number in the phone list. Replaces the old phone number
+        with a new one if the old number exists and the new number is not already in use.
+
+        :param old_phone: The phone number currently stored in the list that
+            needs to be replaced.
+        :param new_phone: The new phone number to replace the old one. Must not
+            already exist in the list.
+        :return: The newly created Phone object representing the new phone number.
+        :raises UnknownPhoneNumberError: If the old phone number is not found in the list.
+        :raises AlreadyPhoneNumberError: If the new phone number is already in the list.
+        """
+        return self.__phones.replace(old_phone, new_phone)
+
     def __str__(self):
         """Returns a string representation of the contact."""
         result = f"Contact name: {self.name}"

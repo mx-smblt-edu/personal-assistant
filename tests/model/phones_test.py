@@ -2,7 +2,10 @@
 Unit tests for validating the behavior of adding and removing phone numbers
 in the `Phones` collection.
 """
+import pytest
 
+from src.error.already_phone_number_error import AlreadyPhoneNumberError
+from src.error.unknown_phone_number_error import UnknownPhoneNumberError
 from src.model.phone import Phone
 from src.model.phones import Phones
 
@@ -90,3 +93,47 @@ def test_remove_phone_from_empty_list():
     removed_phone = phones.remove(phone)
 
     assert removed_phone is None
+
+
+def test_change_phone_successful():
+    """
+    Test if `replace` successfully replaces an old phone number with a new one.
+    """
+    phones = Phones()
+    old_phone = Phone("1234567890")
+    new_phone = Phone("0987654321")
+
+    phones.add(old_phone)
+    replaced_phone = phones.replace(old_phone, new_phone)
+
+    assert replaced_phone == new_phone
+    assert new_phone in phones.data
+    assert old_phone not in phones.data
+
+
+def test_change_phone_old_number_not_found():
+    """
+    Test if `replace` raises error when the old phone number doesn't exist.
+    """
+    phones = Phones()
+    old_phone = Phone("1234567890")
+    new_phone = Phone("0987654321")
+
+    with pytest.raises(UnknownPhoneNumberError):
+        phones.replace(old_phone, new_phone)
+
+
+def test_change_phone_new_number_already_exists():
+    """
+    Test if `replace` raises error when the new phone number is already in the list.
+    """
+    phones = Phones()
+    old_phone = Phone("1234567890")
+    another_phone = Phone("1122334455")
+    new_phone = Phone("1122334455")
+
+    phones.add(old_phone)
+    phones.add(another_phone)
+
+    with pytest.raises(AlreadyPhoneNumberError):
+        phones.replace(old_phone, new_phone)

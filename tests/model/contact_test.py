@@ -1,6 +1,10 @@
 """
 Unit tests for the Contact class.
 """
+import pytest
+
+from src.error.already_phone_number_error import AlreadyPhoneNumberError
+from src.error.unknown_phone_number_error import UnknownPhoneNumberError
 from src.model.contact import Contact
 from src.model.name import Name
 from src.model.phone import Phone
@@ -106,3 +110,47 @@ def test_remove_phone_from_empty_list():
     removed_phone = contact.remove_phone(phone)
 
     assert removed_phone is None
+
+
+def test_change_phone_successful():
+    """
+    Test if `change_phone` successfully replaces an old phone number with a new one.
+    """
+    contact = Contact(Name("John"))
+    old_phone = Phone("1234567890")
+    new_phone = Phone("0987654321")
+
+    contact.add_phone(old_phone)
+    replaced_phone = contact.change_phone(old_phone, new_phone)
+
+    assert replaced_phone == new_phone
+    assert new_phone in contact._Contact__phones.data
+    assert old_phone not in contact._Contact__phones.data
+
+
+def test_change_phone_old_number_not_found():
+    """
+    Test if `change_phone` raises error when the old phone number doesn't exist.
+    """
+    contact = Contact(Name("John"))
+    old_phone = Phone("1234567890")
+    new_phone = Phone("0987654321")
+
+    with pytest.raises(UnknownPhoneNumberError):
+        contact.change_phone(old_phone, new_phone)
+
+
+def test_change_phone_new_number_already_exists():
+    """
+    Test if `change_phone` raises error when the new phone number is already in the list.
+    """
+    contact = Contact(Name("John Doe"))
+    old_phone = Phone("1234567890")
+    another_phone = Phone("1122334455")
+    new_phone = Phone("1122334455")
+
+    contact.add_phone(old_phone)
+    contact.add_phone(another_phone)
+
+    with pytest.raises(AlreadyPhoneNumberError):
+        contact.change_phone(old_phone, new_phone)
