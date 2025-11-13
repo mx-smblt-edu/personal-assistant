@@ -23,3 +23,6 @@ class InvalidNameError(Exception):
     def __init__(self, email: str):
         self.message = (f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid name: '{email}'. "
                         f"Name must not be empty and must be between 2 and 64 characters long.")
+
+    def __str__(self) -> str:
+        return self.message

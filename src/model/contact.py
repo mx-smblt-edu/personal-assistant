@@ -3,6 +3,7 @@ Provides the Contact class.
 """
 from src.model.name import Name
 from src.model.phone import Phone
+from src.model.phone_number_search_template import PhoneNumberSearchTemplate
 from src.model.phones import Phones
 
 
@@ -56,6 +57,15 @@ class Contact:
         :raises AlreadyPhoneNumberError: If the new phone number is already in the list.
         """
         return self.__phones.replace(old_phone, new_phone)
+
+    def contains(self, template: PhoneNumberSearchTemplate) -> bool:
+        """
+        Determines if a given phone number is present in the phone list.
+
+        :param template: The phone number template to search for.
+        :return: True if the phone number is found, False otherwise.
+        """
+        return self.__phones.contains(template)
 
     def __str__(self):
         """Returns a string representation of the contact."""

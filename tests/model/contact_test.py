@@ -8,6 +8,7 @@ from src.error.unknown_phone_number_error import UnknownPhoneNumberError
 from src.model.contact import Contact
 from src.model.name import Name
 from src.model.phone import Phone
+from src.model.phone_number_search_template import PhoneNumberSearchTemplate
 
 
 def test_contact_initialization():
@@ -154,3 +155,57 @@ def test_change_phone_new_number_already_exists():
 
     with pytest.raises(AlreadyPhoneNumberError):
         contact.change_phone(old_phone, new_phone)
+
+
+def test_contains_existing_phone_number():
+    """
+    Tests that the `contains` method of a `Contact` instance returns True
+    when a phone number exists in the contact's phone list.
+    """
+    name = Name("John")
+    contact = Contact(name)
+    phone = Phone("1234567890")
+    contact.add_phone(phone)
+    template = PhoneNumberSearchTemplate("1234567890")
+
+    assert contact.contains(template) is True
+
+
+def test_contains_non_existing_phone_number():
+    """
+    Tests that the `contains` method of a `Contact` instance returns False
+    for a phone number that is not in the contact's phone list.
+    """
+    name = Name("John")
+    contact = Contact(name)
+    phone = Phone("1234567890")
+    contact.add_phone(phone)
+    template = PhoneNumberSearchTemplate("9876543210")
+
+    assert contact.contains(template) is False
+
+
+def test_contains_partial_match_within_phone_number():
+    """
+    Tests that the `contains` method of a `Contact` instance can find a
+    partial match of a phone number.
+    """
+    name = Name("John")
+    contact = Contact(name)
+    phone = Phone("1234567890")
+    contact.add_phone(phone)
+    template = PhoneNumberSearchTemplate("456")
+
+    assert contact.contains(template) is True
+
+
+def test_contains_empty_phone_list():
+    """
+    Tests that the `contains` method of a `Contact` instance returns False
+    when the phone list is empty.
+    """
+    name = Name("John")
+    contact = Contact(name)
+    template = PhoneNumberSearchTemplate("1234567890")
+
+    assert contact.contains(template) is False

@@ -10,6 +10,7 @@ from collections import UserList
 from src.error.already_phone_number_error import AlreadyPhoneNumberError
 from src.error.unknown_phone_number_error import UnknownPhoneNumberError
 from src.model.phone import Phone
+from src.model.phone_number_search_template import PhoneNumberSearchTemplate
 
 
 class Phones(UserList[Phone]):
@@ -71,6 +72,22 @@ class Phones(UserList[Phone]):
 
         self.data[index_old_phone_number] = new_phone
         return new_phone
+
+    def contains(self, template: PhoneNumberSearchTemplate) -> bool:
+        """
+        Determines if a given phone number is present in the data.
+
+        This method iterates through a collection of phone numbers and checks
+        if the provided phone_number exists within the `value` attribute of any
+        phone object in the data.
+
+        :param template: The phone number template to search for.
+        :return: True if the phone number is found, False otherwise.
+        """
+        for phone in self.data:
+            if template.value in phone.value:
+                return True
+        return False
 
     def __index_phone_number(self, phone: Phone) -> int | None:
         """

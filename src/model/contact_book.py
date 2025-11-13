@@ -5,6 +5,8 @@ from collections import UserDict
 
 from src.model.contact import Contact
 from src.model.name import Name
+from src.model.name_search_template import NameSearchTemplate
+from src.model.phone_number_search_template import PhoneNumberSearchTemplate
 
 
 class ContactBook(UserDict[Name, Contact]):
@@ -38,7 +40,7 @@ class ContactBook(UserDict[Name, Contact]):
         """
         return self.data.get(name, None)
 
-    def find_by_name(self, name: str) -> list[Contact] | None:
+    def find_by_name(self, template: NameSearchTemplate) -> list[Contact] | None:
         """
         Searches for contacts by a specified name substring.
 
@@ -46,13 +48,31 @@ class ContactBook(UserDict[Name, Contact]):
         is found (case-insensitive) in the contact's name. If no matching contacts
         are found, it returns None.
 
-        :param name: The name substring to search for.
+        :param template: The name template to search for.
         :return: None
         """
-        sub_string = name.casefold()
         contacts = [
             contact for contact in self.data.values()
-            if sub_string in contact.name.value.casefold()
+            if template.value in contact.name.value.casefold()
+        ]
+        if len(contacts) == 0:
+            return None
+        return contacts
+
+    def find_by_phone(self, template: PhoneNumberSearchTemplate) -> list[Contact] | None:
+        """
+        Searches for contacts by a specified phone number substring.
+
+        This method looks for all contacts where the given name substring
+        is found (case-insensitive) in the contact's name. If no matching contacts
+        are found, it returns None.
+
+        :param template: The phone number template to search for.
+        :return: None
+        """
+        contacts = [
+            contact for contact in self.data.values()
+            if contact.contains(template)
         ]
         if len(contacts) == 0:
             return None
