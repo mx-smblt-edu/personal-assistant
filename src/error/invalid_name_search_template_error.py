@@ -4,7 +4,6 @@ Exception raised for invalid name search templates.
 This exception is used to indicate that the provided name search
 template does not meet the expected format or requirements.
 """
-from colorama import Fore, Style
 
 
 class InvalidNameSearchTemplateError(Exception):
@@ -16,7 +15,7 @@ class InvalidNameSearchTemplateError(Exception):
     """
 
     def __init__(self, template: str):
-        self.message = f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid name search template: '{template}'."
+        self.message = f"Invalid name search template: '{template}'."
 
     def __str__(self) -> str:
         return self.message

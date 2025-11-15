@@ -4,7 +4,6 @@ Exception raised for invalid phone number search templates.
 This exception is used to indicate that the provided phone number search
 template does not meet the expected format or requirements.
 """
-from colorama import Fore, Style
 
 
 class InvalidPhoneNumberSearchTemplateError(Exception):
@@ -17,7 +16,7 @@ class InvalidPhoneNumberSearchTemplateError(Exception):
     """
 
     def __init__(self, template: str):
-        self.message = f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid phone number search template: '{template}'."
+        self.message = f"Invalid phone number search template: '{template}'."
 
     def __str__(self) -> str:
         return self.message
