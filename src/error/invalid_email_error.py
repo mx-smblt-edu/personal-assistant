@@ -5,7 +5,6 @@ This module introduces a specific exception, `InvalidEmailError`, which
 is used to raise an error when an invalid email address is encountered.
 It provides a detailed error message highlighting the invalid input.
 """
-from colorama import Fore, Style
 
 
 class InvalidEmailError(Exception):
@@ -21,7 +20,7 @@ class InvalidEmailError(Exception):
     """
 
     def __init__(self, email: str):
-        self.message = f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid email: '{email}'."
+        self.message = f"Invalid email: '{email}'."
 
     def __str__(self) -> str:
         return self.message

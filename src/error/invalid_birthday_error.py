@@ -5,7 +5,6 @@ This module provides an `InvalidBirthdayError` exception for scenarios where
 a user provides a birthday date in an invalid format. The exception guides
 the user to use the correct `DD.MM.YYYY` format.
 """
-from colorama import Fore, Style
 
 
 class InvalidBirthdayError(Exception):
@@ -19,8 +18,7 @@ class InvalidBirthdayError(Exception):
     """
 
     def __init__(self, date: str):
-        self.message = (f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid date format '{date}'. "
-                        f"Use {Fore.GREEN}DD.MM.YYYY{Style.RESET_ALL}.")
+        self.message = f"Invalid date format '{date}'. Use DD.MM.YYYY."
 
     def __str__(self) -> str:
         return self.message

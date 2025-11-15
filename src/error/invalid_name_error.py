@@ -5,7 +5,6 @@ This module introduces a specific exception, `InvalidNameError`, which
 is used to raise an error when an invalid name is encountered.
 It provides a detailed error message highlighting the invalid input.
 """
-from colorama import Fore, Style
 
 
 class InvalidNameError(Exception):
@@ -21,8 +20,8 @@ class InvalidNameError(Exception):
     """
 
     def __init__(self, email: str):
-        self.message = (f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid name: '{email}'. "
-                        f"Name must not be empty and must be between 2 and 64 characters long.")
+        self.message = (f"Invalid name: '{email}'. "
+                        "Name must not be empty and must be between 2 and 64 characters long.")
 
     def __str__(self) -> str:
         return self.message

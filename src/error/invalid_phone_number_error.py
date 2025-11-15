@@ -5,7 +5,6 @@ invalid phone number inputs.
 This module introduces an exception specifically tailored to indicate that
 a provided phone number string is invalid.
 """
-from colorama import Fore, Style
 
 
 class InvalidPhoneNumberError(Exception):
@@ -19,7 +18,7 @@ class InvalidPhoneNumberError(Exception):
     """
 
     def __init__(self, phone: str):
-        self.message = f"{Fore.RED}[ERROR]{Style.RESET_ALL} Invalid phone number: '{phone}'."
+        self.message = f"Invalid phone number: '{phone}'."
 
     def __str__(self) -> str:
         return self.message
